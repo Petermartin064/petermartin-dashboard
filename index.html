@@ -6,69 +6,127 @@
   <title>Peter Martin's Interactive Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
+    /* Global Reset */
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #0d1117;
-      font-family: 'Courier New', monospace;
-      color: #00ff00;
     }
     
+    /* Base Styles - Mobile First Approach */
+    :root {
+      --primary-color: #00ff00;
+      --secondary-color: #00aa00;
+      --background-color: #0d1117;
+      --panel-bg-color: rgba(0, 30, 0, 0.5);
+      --terminal-font: 'Courier New', monospace;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      font-family: var(--terminal-font);
+      color: var(--primary-color);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    /* Fluid Typography */
+    @media screen and (min-width: 320px) {
+      html {
+        font-size: calc(14px + 2 * ((100vw - 320px) / 680));
+      }
+    }
+    
+    @media screen and (min-width: 1000px) {
+      html {
+        font-size: 16px;
+      }
+    }
+    
+    /* Container */
     .container {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0.75rem;
     }
     
+    @media screen and (min-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+    }
+    
+    /* Header */
     header {
       text-align: center;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #00ff00;
-      padding-bottom: 20px;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--primary-color);
+      padding-bottom: 1rem;
     }
     
     h1 {
-      color: #00ff00;
-      font-size: 32px;
+      color: var(--primary-color);
+      font-size: 1.75rem;
       margin: 0;
       text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
     }
     
-    .subtitle {
-      color: #00aa00;
-      font-size: 16px;
-      margin-top: 10px;
+    @media screen and (min-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
     }
     
+    .subtitle {
+      color: var(--secondary-color);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    /* Neural Network Section */
     .neural-network {
-      margin: 30px auto;
+      margin: 1.5rem auto;
+      width: 100%;
       max-width: 800px;
-      border: 1px solid #00ff00;
+      border: 1px solid var(--primary-color);
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
     }
     
+    /* Dashboard Container */
     .dashboard-container {
-      margin-top: 50px;
+      margin-top: 2rem;
     }
     
+    /* Back to Profile Link */
     .back-to-profile {
       text-align: center;
-      margin-top: 50px;
-      margin-bottom: 30px;
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
     }
     
     .back-link {
       display: inline-block;
       background-color: rgba(0, 255, 0, 0.2);
-      color: #00ff00;
+      color: var(--primary-color);
       text-decoration: none;
-      padding: 10px 20px;
-      border: 1px solid #00ff00;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid var(--primary-color);
       border-radius: 5px;
       font-weight: bold;
       transition: all 0.3s;
+      font-size: 0.875rem;
+    }
+    
+    @media screen and (min-width: 768px) {
+      .back-link {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+      }
     }
     
     .back-link:hover {
@@ -76,13 +134,34 @@
       box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
     }
     
+    /* Footer */
     footer {
       text-align: center;
-      margin-top: 50px;
-      padding: 20px;
-      font-size: 12px;
-      border-top: 1px solid #00aa00;
-      color: #00aa00;
+      margin-top: 2.5rem;
+      padding: 1rem;
+      font-size: 0.75rem;
+      border-top: 1px solid var(--secondary-color);
+      color: var(--secondary-color);
+      word-wrap: break-word;
+    }
+    
+    @media screen and (min-width: 768px) {
+      footer {
+        font-size: 0.875rem;
+      }
+    }
+    
+    /* Mobile-specific adjustments */
+    @media screen and (max-width: 480px) {
+      .neural-network {
+        border-radius: 5px;
+      }
+      
+      footer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -95,7 +174,7 @@
 
     <!-- Neural Network Visualization -->
     <div class="neural-network">
-      <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
         <style>
           @keyframes pulse {
             0%, 100% { opacity: 0.3; r: 4; }
@@ -158,6 +237,17 @@
           @keyframes scan {
             0% { transform: translateY(-150px); }
             100% { transform: translateY(150px); }
+          }
+          
+          /* Reduce animation complexity on small screens */
+          @media (prefers-reduced-motion), (max-width: 480px) {
+            .connection, .node, .activity-dot, .scan-line, .brain {
+              animation-duration: 4s;
+            }
+            
+            .scan-line {
+              opacity: 0.5;
+            }
           }
         </style>
         
@@ -324,7 +414,7 @@
             <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" begin="0.6s" />
           </circle>
           
-          <text x="100" y="5" font-family="monospace" font-size="14" fill="#00ff00">NETWORK UPTIME: 263D:14H:22M</text>
+          <text x="100" y="5" font-family="monospace" font-size="14" fill="#00ff00">UPTIME: 263D:14H:22M</text>
           <text x="290" y="5" font-family="monospace" font-size="14" fill="#00ff00" text-anchor="end">v1.0.4</text>
         </g>
       </svg>
@@ -341,7 +431,9 @@
     </div>
 
     <footer>
-      SYSTEM STATUS: OPERATIONAL • DATA UPDATED: 2025-04-05 • LAST LOGIN: 3 HOURS AGO
+      <span>SYSTEM STATUS: OPERATIONAL</span>
+      <span>DATA UPDATED: 2025-04-05</span>
+      <span>LAST LOGIN: 3 HOURS AGO</span>
     </footer>
   </div>
 
